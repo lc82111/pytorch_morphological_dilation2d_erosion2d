@@ -67,28 +67,6 @@ class Morphology(nn.Module):
 
         return x 
 
-    def forward_bak(self, x):
-        # padding
-        pdb.set_trace()
-
-        # unfold
-        x = self.unfold(x)  # (B, Cin*kH*kW, L), where L is the numbers of patches
-
-        # erosion
-        for c_out in range(self.out_channels):
-            weight = self.weight[c_out, ...].view(-1)  # (Cin,kH,kW)-->(Cin*kH*kW,)
-            weight = weight.unsqueeze(0).unsqueeze(-1)  # (1, Cin*kH*kW, 1)
-            out, _ = torch.min(x-weight, dim=1, keepdim=True) # (B, 1, L)
-            out_size = int(math.sqrt(x.size(-1)))
-            out = F.fold(out, (out_size, out_size), (1,1), dilation=1, padding=0, stride=1) # (B, 1, L_sqrt, L_sqrt)
-
-            if c_out == 0:
-                outputs = out
-            else:
-                outputs = torch.cat([outputs, out] ,dim=1)  # (B, Cout, L/2, L/2)
-
-        return outputs
-
 class Dilation2d(Morphology):
     def __init__(self, in_channels, out_channels, kernel_size=5, soft_max=True, beta=20):
         super(Dilation2d, self).__init__(in_channels, out_channels, kernel_size, soft_max, beta, 'dilation2d')
