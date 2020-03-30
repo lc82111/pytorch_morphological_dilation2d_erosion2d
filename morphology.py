@@ -13,8 +13,8 @@ class Morphology(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=5, soft_max=True, beta=15, type=None):
         '''
         in_channels: scalar
-        out_channels: scalar, the number of the morpholigical neure. 
-        kernel_size: scalar, the spatial size of the morpholigical neure.
+        out_channels: scalar, the number of the morphological neure. 
+        kernel_size: scalar, the spatial size of the morphological neure.
         soft_max: bool, using the soft max rather the torch.max(), ref: Dense Morphological Networks: An Universal Function Approximator (Mondal et al. (2019)).
         beta: scalar, used by soft_max.
         type: str, dilation2d or erosion2d.
